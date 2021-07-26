@@ -33,7 +33,7 @@ class TaskBloc {
     eventController.stream.listen((TaskEvent event) async {
       List<Tasks> tasks = await getTask();
       if (event is GetTasks) {
-        print("==1: ${tasks.length}");
+        // print("==1: ${tasks.length}");
         state = TasksState(tasks);
       } else if (event is UpdateTask) {
         TasksState statetemp = state;
@@ -60,12 +60,28 @@ class TaskBloc {
             statetemp.tasks.add(event.task);
         }
         state = TasksState(statetemp.tasks);
+      } else if (event is DeleteTask) {
+        TasksState statetemp = state;
+        Tasks tasksRemote;
+        statetemp.tasks.forEach((item) {
+          int index = item.tasks.indexWhere((item) => item.id == event.task.id);
+          if (index != -1) {
+            item.tasks.removeAt(index);
+          }
+          if (item.tasks.length == 0) {
+            tasksRemote = item;
+          }
+        });
+        if (tasksRemote != null) {
+          statetemp.tasks.removeWhere((item) => item.date == tasksRemote.date);
+        }
+        state = TasksState(statetemp.tasks);
       }
 
       taskBloc.stateController.sink.add(state);
       taskBloc.stateProcessController.sink.add(state);
 
-      if (event is AddTask || event is UpdateTask) {
+      if (event is AddTask || event is UpdateTask || event is DeleteTask) {
         saveLocal(state.tasks);
       }
     });

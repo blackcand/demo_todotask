@@ -15,3 +15,9 @@ class AddTask extends TaskEvent {
 }
 
 class GetTasks extends TaskEvent {}
+
+class DeleteTask extends TaskEvent {
+  DeleteTask(this.task);
+
+  final Task task;
+}

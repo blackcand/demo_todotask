@@ -303,7 +303,27 @@ class _HomeTasksState extends State<HomeTasks> {
                                               ],
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        Container(
+                                            width: 30,
+                                            height: 60,
+                                            alignment: Alignment.center,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                TaskBloc.taskBloc
+                                                    .eventController.sink
+                                                    .add(DeleteTask(task));
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Icon(
+                                                  Icons.delete,
+                                                  size: 24,
+                                                  color: Color(0xFF616161),
+                                                ),
+                                              ),
+                                            ))
                                       ],
                                     ),
                                   ),
